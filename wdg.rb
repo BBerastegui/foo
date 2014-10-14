@@ -26,7 +26,11 @@ def receivefile()
 # Close file handler
 		filehandler.close
 		puts "Temp. name: "+tempname
-		handlefile(tempname)
+		if (checkduplicate(tempname))
+			puts "DUPLICATED !"
+		else
+			handlefile(tempname)
+		end
 	end
 	end
 end
@@ -36,6 +40,11 @@ def handlefile(tempname)
 	hash = Digest::MD5.hexdigest(File.read(File.open('/tmp/'+tempname,'r')))
 	puts hash
 	File.rename('/tmp/'+tempname, '/tmp/'+hash+'.bin')
+end
+
+def checkduplicate(tempname)
+	puts "I'm into tempname()"
+	return false
 end
 
 def craftconfig()
