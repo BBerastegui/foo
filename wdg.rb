@@ -32,11 +32,11 @@ end
 end
 
 def handlefile(tempname)
-puts "Renaming: "+tempname
 hash = Digest::MD5.hexdigest(File.read(File.open('/tmp/'+tempname,'r')))
 puts hash
 if (checkduplicate(hash))
 	puts "DUPLICATED !"
+	File.delete('/tmp/'+tempname)
 else
 	puts "Not duplicated, renaming..."
 	File.rename('/tmp/'+tempname, '/tmp/'+hash+'.bin')
