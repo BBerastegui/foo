@@ -1,5 +1,5 @@
 require 'socket'
-require 'digest/md5'
+require 'digest/sha1'
 
 def init()
 	receivefile()
@@ -32,7 +32,7 @@ end
 end
 
 def handlefile(tempname)
-hash = Digest::MD5.hexdigest(File.read(File.open('/tmp/'+tempname,'r')))
+hash = Digest::SHA1.hexdigest(File.read(File.open('/tmp/'+tempname,'r')))
 puts hash
 if (checkduplicate(hash))
 	puts "DUPLICATED !"
