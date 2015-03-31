@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -12,24 +13,24 @@ func random(min, max int) int {
 	return rand.Intn(max-min) + min
 }
 
-var done chan bool
-
 // Channel of simultaneous tasks
 var simul = make(chan string, 5)
 
 // Array of strings with finished tasks
 var finished_tasks []string
 
-func main() {
+// Waitgroup... or something...
+var wg sync.WaitGroup
 
+func main() {
+	wg.Add(1)
 	task_queue := make(chan string)
 	//var task_run chan string
 
 	go consume(task_queue, simul)
 	go feed(task_queue)
-	<-done
-	fmt.Println("Tareas finalizadas: ", finished_tasks)
-
+	wg.Wait()
+	fmt.Println(len(finished_tasks), " tareas finalizadas: ", finished_tasks)
 }
 
 // This function will feed the task channel
@@ -42,9 +43,11 @@ func feed(task_queue chan string) {
 		fmt.Println("Waiting 10 seconds to add more tasks...")
 		time.Sleep(time.Second * 10)
 	}
-	done <- true
+	wg.Done()
 }
 
+// This will run in a loop 4evah, feeding as simultaneous goroutines
+// as the simul channel buffer is set.
 func consume(task_queue chan string, simul chan string) {
 	for {
 		id := <-task_queue
