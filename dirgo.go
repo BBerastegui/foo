@@ -17,7 +17,7 @@ func random(min, max int) int {
 }
 
 // Channel of simultaneous tasks
-var simul = make(chan string, 20)
+var simul = make(chan string, 10)
 var task_queue = make(chan string)
 
 // Array of strings with finished tasks
@@ -44,7 +44,7 @@ func main() {
 func feed(task_queue chan string) {
 
 	// First open file and for each line...
-	file, err := os.Open("/tmp/minidict.txt")
+	file, err := os.Open(os.Args[2])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,7 +52,6 @@ func feed(task_queue chan string) {
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		//fmt.Println(scanner.Text())
 		task_queue <- scanner.Text()
 	}
 
@@ -75,9 +74,8 @@ func consume(task_queue chan string, simul chan string) {
 
 func scan(path string, simul chan string) {
 	// Foo demo func.
-	//fmt.Println("Scan commenced...", path)
 	// Perform HTTP request
-	response, err := http.Get("http://localhost:8000/" + path)
+	response, err := http.Get(os.Args[1] + path)
 	if err != nil {
 		// Something happened.
 		log.Fatal("[Request error] %s", err)
@@ -91,18 +89,20 @@ func scan(path string, simul chan string) {
 		// Handle HTTP status
 		switch {
 		case response.StatusCode == 404:
-		//fmt.Println("NOPE")
+			fmt.Printf("\r                                ")
+			fmt.Printf("\r %s", path)
 		default:
 			switch {
 			case response.StatusCode == 200:
 				fmt.Println("Found: " + path)
 			case response.StatusCode >= 300 && response.StatusCode <= 399:
 				fmt.Println("30X on " + path)
+			case response.StatusCode == 403:
+				fmt.Println("403 on " + path)
 			}
 		}
-		//fmt.Println(response.StatusCode)
 	}
-	//time.Sleep(time.Second * time.Duration(random(1, 5)))
-	//	fmt.Println("Task ", path, " finished.")
+
+	//fmt.Println("Task ", path, " finished.")
 	finished_tasks = append(finished_tasks, <-simul)
 }
