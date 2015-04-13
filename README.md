@@ -3,6 +3,11 @@ foo
 
 A lot of messy code :S
 
+dirgo.go
+====
+
+Go version of dirb. Just for fun, customizing and profit.
+
 wdg.rb
 ====
 Just a snippet of code which should receive a binary file using TCP sockets, execute some gdb commands over it and return results to the client.
