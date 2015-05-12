@@ -25,6 +25,9 @@ echo "You entered: $CA_server_cert_password"
 
 # == Setup of directories ==
 
+mkdir $CA_name"_CA_files"
+cd $CA_name"_CA_files"
+# All files inside that main folder.
 mkdir $CA_name
 cd $CA_name
 mkdir certs private
@@ -39,11 +42,11 @@ default_ca = $CA_name
 
 [ $CA_name ]
 dir = .
-certificate = $dir/cacert.pem
-database = $dir/index.txt
-new_certs_dir = $dir/certs
-private_key = $dir/private/cakey.pem
-serial = $dir/serial
+certificate = \$dir/cacert.pem
+database = \$dir/index.txt
+new_certs_dir = \$dir/certs
+private_key = \$dir/private/cakey.pem
+serial = \$dir/serial
 
 default_crl_days = 7
 default_days = 365
@@ -115,4 +118,4 @@ openssl req -new -key key.pem -out req.pem -outform PEM -subj /CN=$CA_hostname/O
 cd ../$CA_name
 openssl ca -config openssl.cnf -in ../client/req.pem -out ../client/cert.pem -notext -batch -extensions client_ca_extensions
 cd ../client
-openssl pkcs12 -EXport -out keycert.p12 -in cert.pem -inkey key.pem -passout pass:$CA_client_cert_password
+openssl pkcs12 -export -out keycert.p12 -in cert.pem -inkey key.pem -passout pass:$CA_client_cert_password
