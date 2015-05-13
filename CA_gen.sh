@@ -25,6 +25,10 @@ echo "You entered: $CA_server_cert_password"
 
 # == Setup of directories ==
 
+if [ -d $CA_name"_CA_files" ]; then
+    echo "Directory "$CA_name"_CA_files exists."
+    exit
+fi
 mkdir $CA_name"_CA_files"
 cd $CA_name"_CA_files"
 # All files inside that main folder.
