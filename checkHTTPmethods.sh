@@ -15,14 +15,18 @@ esac
 shift # pass argument or value
 done
 
-methods=("GET" "HEAD" "POST" "PUT" "DELETE" "CONNECT" "OPTIONS" "TRACE" "TRACK" "NONEXISTENT")
+echo -e "\n[i] Response headers:\n"
+curl -s -D - $TARGETURL -o /dev/null
 
+echo -e "[i] HTTP methods check\n"
+methods=("GET" "HEAD" "POST" "PUT" "DELETE" "CONNECT" "OPTIONS" "TRACE" "TRACK" "NONEXISTENT")
 for m in "${methods[@]}"
 do
     statusCode=$(curl -m 3 -s -o /dev/null -w "%{http_code}" -X $m $TARGETURL)
     if [ $statusCode = "405" ]; then
-        echo "[i] $m not allowed."
+        echo -e "\t[i] $m not allowed."
     else
-        echo "[!] $m returned $statusCode."
+        echo -e "\t[!] $m returned $statusCode."
     fi
 done
+echo 
