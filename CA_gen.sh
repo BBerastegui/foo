@@ -54,7 +54,7 @@ serial = \$dir/serial
 
 default_crl_days = 7
 default_days = 365
-default_md = sha1
+default_md = sha256
 
 policy = "$CA_name"_policy
 x509_extensions = certificate_extensions
@@ -73,7 +73,7 @@ basicConstraints = CA:false
 [ req ]
 default_bits = 2048
 default_keyfile = ./private/cakey.pem
-default_md = sha1
+default_md = sha256
 prompt = yes
 distinguished_name = root_ca_distinguished_name
 x509_extensions = root_ca_extensions
