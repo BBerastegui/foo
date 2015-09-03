@@ -21,27 +21,27 @@ function set_ip_src(){
 function tcp_checks(){
     read -p "Perform \"weird\" scans (TCP Null, FIN, Xmas...)? " -n 1 -r
     echo
-    nmap -r -sT $IP_DST -p- -oA $IP_DST"_TCP_full_"$VIS_DATE
+    nmap -r -Pn -sT $IP_DST -p- -oA $IP_DST"_TCP_full_"$VIS_DATE
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         # Perform weird TCP scans
         echo "[i] These scans requires root access: "
-        sudo nmap -r -sN $IP_DST --top-ports 1000 -oA $IP_DST"_Null_top1000_"$VIS_DATE
-        sudo nmap -r -sF $IP_DST --top-ports 1000 -oA $IP_DST"_FIN_top1000_"$VIS_DATE
-        sudo nmap -r -sX $IP_DST --top-ports 1000 -oA $IP_DST"_Xmas_top1000_"$VIS_DATE
-        sudo nmap -r -sA $IP_DST --top-ports 1000 -oA $IP_DST"_ACK_top1000_"$VIS_DATE
+        sudo nmap -r -Pn -sN $IP_DST --top-ports 1000 -oA $IP_DST"_Null_top1000_"$VIS_DATE
+        sudo nmap -r -Pn -sF $IP_DST --top-ports 1000 -oA $IP_DST"_FIN_top1000_"$VIS_DATE
+        sudo nmap -r -Pn -sX $IP_DST --top-ports 1000 -oA $IP_DST"_Xmas_top1000_"$VIS_DATE
+        sudo nmap -r -Pn -sA $IP_DST --top-ports 1000 -oA $IP_DST"_ACK_top1000_"$VIS_DATE
     fi
 }
 
 # UDP
 function udp_checks(){
     echo "[i] UDP scan requires root access: "
-    sudo nmap -r -sU --top-ports 1000 -oA $IP_DST"_UDP_top1000_"$VIS_DATE
+    sudo nmap -r -Pn -sU --top-ports 1000 -oA $IP_DST"_UDP_top1000_"$VIS_DATE
 }
 
 # ICMP
 function icmp_checks(){
-    nmap -r -sn $IP_DST -oA $IP_DST"_ICMP_"$VIS_DATE
+    nmap -r -Pn -sn $IP_DST -oA $IP_DST"_ICMP_"$VIS_DATE
 }
 
 # IP protocol scan
