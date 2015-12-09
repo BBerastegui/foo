@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 clone_repo() {
     echo "[i] Cloning https://github.com$1.git ."
     cd /tmp/$TMP_FILENAME
