@@ -5,37 +5,33 @@ set -e
 #######################################
 # Global variables
 #######################################
-EXCLUDED_FILES="js,html"
+# Excluded files
+EXCLUDED_FILES="css,html,js"
+
+# Regex sets for languages
+REGEX[php]="exec\(.*?\)|system\(.*?\)"
+REGEX[java]="Runtime.getRuntime\(.*?\)"
+REGEX[generic]="password|pass"
 
 #######################################
 # Look for vulns of specific languages
 # Globals:
 #   EXCLUDED_FILES 
 # Arguments:
-#   Language (lowercase) Ex.: php, java
-#   Path Ex.: .
+#   $1 - Language (lowercase) Ex.: php, java
+#   $2 - Path Ex.: .
 # Returns:
 #   None
 #######################################
 
 search_vulns() {
     excluded_files="*.{$EXCLUDED_FILES}"
-    #echo $excluded_files
-    case "$1" in
-        # Java
-        "java")
-        echo "JAVA"
-        ;;
-        # PHP
-        "php")
-        echo "PHP"
-        echo $excluded_files
-        bash -c "grep -RE \"exec\(.*?\)|system\(.*?\)\" --color=auto --exclude=$excluded_files $2"
-        ;;
-    *)
-        echo $"[! function] Usage: search_vulns [LANGUAGE] [DIRECTORY]"
-        exit 1
-    esac
+    echo $excluded_files
+    for i in "${REGEX[java]}"
+    do
+        echo $i
+    done
+    #bash -c "grep -RE \"$REGEX[$1]\" --color=auto --exclude=$excluded_files $2"
 }
 
 search_vulns $1 $2

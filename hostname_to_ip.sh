@@ -6,6 +6,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     tmpIP=$(dig +short $line)
     if [ -z "$tmpIP" ]; then
         echo "    [!] Failed to resolve: $line"
+        echo $line >> $1_ip_FAILED.list
     else
         echo $tmpIP >> $1_ip.list
     fi
