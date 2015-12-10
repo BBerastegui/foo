@@ -3,9 +3,9 @@
 set -e
 
 clone_repo() {
-    echo "[i] Cloning https://github.com$1.git ."
+    echo "[i] Cloning https://github.com/$github_username/$1.git ."
     cd /tmp/$TMP_FILENAME
-    git clone https://github.com$1.git
+    git clone https://github.com/$github_username/$1.git
 }
 
 USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
@@ -18,9 +18,9 @@ TMP_FILENAME=$github_username.$$
 
 mkdir /tmp/$TMP_FILENAME
 
-curl -A "$USER_AGENT" https://github.com/$github_username?tab=repositories -o /tmp/$TMP_FILENAME.repositories.html
+curl -A "$USER_AGENT" https://api.github.com/users/$github_username/repos -o /tmp/$TMP_FILENAME.repositories.json
 
-cat /tmp/$TMP_FILENAME.repositories.html | tr -d '\n'| grep -oE "$REGEXP_GITHUB" | cut -d'"' -f2 |
+sed -n 's/.*"name": "\(.*\)",/\1/p' /tmp/$TMP_FILENAME.repositories.json |
 while IFS= read -r line
 do
     clone_repo "$line"
