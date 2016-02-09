@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
-	"strings"
+	"net/http/httputil"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -12,14 +13,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func handlerAll(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var response string
-	response = r.Header["X-Real-Ip"][0] + "\n"
-	for k, v := range r.Header {
-		if k != "X-Real-Ip" {
-			values := strings.Join(v, ",")
-			response = response + k + ":" + values + "\n"
-		}
+	response = r.Header["X-Real-Ip"][0] + "\n\n"
+	delete(r.Header, "X-Real-Ip")
+	reqDump, err := httputil.DumpRequest(r, true)
+	if err != nil {
+		log.Fatal(err)
 	}
+	// Append dump to response
+	response += string(reqDump)
 	fmt.Fprintf(w, "%s\n", response)
 }
 
