@@ -1,0 +1,41 @@
+# Generic
+
+### WARNING ###
+# Remember to escape double quotes in the regex if you need it... :D
+
+MD5 - [a-f0-9]{32}
+SHA1 - \b([a-f0-9]{40})\b
+
+# Pending to fix to match this ---> validates_format_of :name, with: /^[a-z ]+$/i 
+#validates_format_of.*?with:\s+\/\^{0,1}.*?\$\/.*"
+
+# Vulnerabilities / Juicy func.
+# ASP
+Exec\(.*?\)
+
+# Java
+Runtime.getRuntime\s?\([',"]?.*?[',"]?\)
+
+# PHP
+escapeshellcmd\s?\([',"]?.*?[',"]?\)
+proc_open\s?\([',"]?.*?[',"]?\)
+popen\s?\([',"]?.*?[',"]?\)
+
+# Ruby
+%x/.*?/
+IO\.popen\s?\([',"]?.*?[',"]?\)
+Kernel\.exec
+Kernel\.open\s?\([',"]?.*?[',"]?\)
+Kernel\.system
+YAML::dump\s?\([',"]?.*?[',"]?\)
+YAML::load\s?\([',"]?.*?[',"]?\)
+YAML\.parse\s?\([',"]?.*?[',"]?\)
+\.calculate\(:\.*?, .*?\[.*?\]\)
+\.pluck\(params\[:.*?\]\)
+serialize\s.*
+
+# Others / generic
+\`.*?\`
+exec\s?\([',"]?.*?[',"]?\)
+open\s?\([',"]?.*?[',"]?\)
+system\s?\([',"]?.*?[',"]?\)
