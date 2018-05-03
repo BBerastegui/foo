@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>CORS basic check</title>
+</head>
+
+<body>
+  <center>
+    <h2>CORS basic check</h2>
+
+    <div id="container">
+      <pre>URL / Method / withCredentials</pre>
+      <input id="target_url" type="text" style="width:20%"/>
+      <input id="http_method" type="text" value="GET"/>
+      <i>withCredentials:</i> <input id="with_credentials" type="checkbox" checked=true/>
+      <button type="button" onclick="cors()">Check</button>
+    </div>
+    <pre><code id="response"></code></pre>
+    <script type="text/javascript">
+//<![CDATA[
+    function cors() {
+    // Clear the response div
+    document.getElementById('response').innerHTML = '';
+    var xhttp = new XMLHttpRequest(); xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                document.getElementById("response").innerHTML = this.responseText;
+            } else {
+                if (this.statusText == "") {
+                    document.getElementById("response").innerHTML = this.statusText;
+                } else {
+                    document.getElementById("response").innerHTML = "[!] Error. Something happened. Check the console.";
+                }
+            }
+        }
+    };
+    // Perform the request
+    xhttp.open(document.getElementById("http_method").value, document.getElementById("target_url").value, true); xhttp.withCredentials = document.getElementById("with_credentials").checked;
+    xhttp.send();
+    }
+    //]]>
+    </script>
+  </center>
+</body>
+</html>
